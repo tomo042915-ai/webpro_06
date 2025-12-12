@@ -1,0 +1,38 @@
+<!Doctype html>
+
+<html>
+<head>
+<meta charset="utf-8">
+<title>プレミアリーグ クラブ一覧</title>
+</head>
+<body>
+<h2>プレミアリーグ クラブ一覧 (市場価値・スタジアム)</h2>
+
+<table>
+<tr>
+<th>ID</th>
+<th>略称</th>
+<th>クラブ名</th>
+<th>推定市場価値 (億)</th>
+<th>ホームスタジアム</th> <!-- 追加 -->
+</tr>
+<% let index = 0 %>
+<% for( let club of data ) { %>
+<tr>
+<td><%= club.id %></td>
+<td><%= club.shortName %></td>
+<!-- 詳細ページへのリンクは配列のインデックスを使用 -->
+<td><a href="/premier/<%= index %>"><%= club.name %></a></td>
+<td><%= club.marketValue.toFixed(1) %></td>
+<td><%= club.stadium %></td> <!-- 追加 -->
+</tr>
+<% index += 1 %>
+<% } %>
+</table>
+
+<p><small>※データは架空のものです。</small></p>
+
+<a href="/">トップに戻る（または他のリンク）</a>
+
+</body>
+</html>

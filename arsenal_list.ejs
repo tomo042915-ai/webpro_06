@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>アーセナル選手一覧</title>
+  <style>
+    body { font-family: sans-serif; padding: 20px; color: #333; }
+    h1 { color: #EF0107; border-bottom: 2px solid #EF0107; padding-bottom: 5px; }
+    ul { list-style-type: none; padding: 0; }
+    li { margin: 10px 0; border-bottom: 1px solid #ddd; padding: 10px; }
+    a { text-decoration: none; color: #063672; font-weight: bold; font-size: 1.2em; }
+    a:hover { color: #EF0107; text-decoration: underline; }
+    .position { display: inline-block; width: 40px; font-weight: bold; color: #555; }
+  </style>
+</head>
+<body>
+  <h1>アーセナル 選手一覧</h1>
+  <ul>
+    <% /* 選手配列をループして表示 */ %>
+    <% players.forEach((player, index) => { %>
+      <li>
+        <span class="position"><%= player.position %></span>
+        <!-- ここをクリックすると詳細ページ (/arsenal/0 など) に飛びます -->
+        <a href="/arsenal/<%= index %>"><%= player.name %></a>
+      </li>
+    <% }); %>
+  </ul>
+  <br>
+  <a href="/">トップに戻る</a>
+</body>
+</html>
