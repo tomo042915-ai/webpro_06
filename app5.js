@@ -94,246 +94,219 @@ let arsenalPlayers = [
 ];
 // ★★★★★★★★★★★★★★★★★★★★★★★★★★
 
-// ★★★ バロンドール機能 (ここが必要です！) ★★★
-// 一覧表示
+
+
+
+// ==================================================
+//  ルーティング
+// ==================================================
+
+// トップページ
+app.get("/", (req, res) => {
+  res.render('index');
+});
+
+// --------------------------------------------------
+// 1. プレミアリーグ機能 (CRUD)
+// --------------------------------------------------
+app.get("/premier", (req, res) => {
+  res.render('club_list', { data: premierClubs });
+});
+
+app.get("/premier/detail/:index", (req, res) => {
+  const index = Number(req.params.index);
+  if (premierClubs[index]) {
+    res.render('club_detail', { club: premierClubs[index] });
+  } else { res.status(404).send("データが見つかりません"); }
+});
+
+// 新規登録
+app.get("/premier/add", (req, res) => {
+  res.render('club_form', { mode: 'create', club: null, index: null });
+});
+app.post("/premier/add", (req, res) => {
+  const newClub = {
+    id: Number(req.body.id),
+    name: req.body.name,
+    short: req.body.short,
+    val: Number(req.body.val),
+    manager: req.body.manager,
+    stadium: req.body.stadium
+  };
+  premierClubs.push(newClub);
+  res.redirect('/premier');
+});
+
+// 編集
+app.get("/premier/edit/:index", (req, res) => {
+  const index = Number(req.params.index);
+  if (premierClubs[index]) {
+    res.render('club_form', { mode: 'edit', club: premierClubs[index], index: index });
+  } else { res.status(404).send("データが見つかりません"); }
+});
+app.post("/premier/update/:index", (req, res) => {
+  const index = Number(req.params.index);
+  if (premierClubs[index]) {
+    premierClubs[index] = {
+      id: Number(req.body.id),
+      name: req.body.name,
+      short: req.body.short,
+      val: Number(req.body.val),
+      manager: req.body.manager,
+      stadium: req.body.stadium
+    };
+    res.redirect('/premier');
+  } else { res.status(404).send("データが見つかりません"); }
+});
+
+// 削除
+app.post("/premier/delete/:index", (req, res) => {
+  const index = Number(req.params.index);
+  if (premierClubs[index]) {
+    premierClubs.splice(index, 1);
+    res.redirect('/premier');
+  } else { res.status(404).send("データが見つかりません"); }
+});
+
+
+// --------------------------------------------------
+// 2. バロンドール機能 (CRUD)
+// --------------------------------------------------
 app.get("/ballondor", (req, res) => {
   res.render('ballondor_list', { winners: ballondorWinners });
 });
 
-// 詳細表示
-app.get("/ballondor/:index", (req, res) => {
+app.get("/ballondor/detail/:index", (req, res) => {
   const index = Number(req.params.index);
-  if (index >= 0 && index < ballondorWinners.length) {
+  if (ballondorWinners[index]) {
     res.render('ballondor_detail', { winner: ballondorWinners[index] });
-  } else {
-    res.status(404).send('Not Found');
-  }
+  } else { res.status(404).send("データが見つかりません"); }
 });
 
-
-
-// ★★★ ルーティング (Keiyo1系) ★★★
-
-app.get("/keiyo", (req, res) => {
-  // 本来ならここにDBとのやり取りが入る
-  res.render('db1', { data: station });
+// 新規登録
+app.get("/ballondor/add", (req, res) => {
+  res.render('ballondor_form', { mode: 'create', winner: null, index: null });
 });
-app.get("/keiyo_add", (req, res) => {
-  let id = req.query.id;
-  let code = req.query.code;
-  let name = req.query.name;
-  let newdata = { id: id, code: code, name: name };
-  station.push( newdata );
-  res.redirect('/public/keiyo_add.html');
-});
-
-// ★★★ ルーティング (Keiyo2系 - CRUD) ★★★
-
-// 一覧 (Read All)
-app.get("/keiyo2", (req, res) => {
-  // 本来ならここにDBとのやり取りが入る
-  res.render('keiyo2', {data: station2} );
+app.post("/ballondor/add", (req, res) => {
+  const newWinner = {
+    year: Number(req.body.year),
+    name: req.body.name,
+    country: req.body.country,
+    club: req.body.club,
+    position: req.body.position,
+    desc: req.body.desc
+  };
+  ballondorWinners.push(newWinner);
+  res.redirect('/ballondor');
 });
 
-// Create フォームへのリダイレクト
-app.get("/keiyo2/create", (req, res) => {
-  res.redirect('/public/keiyo2_new.html');
-});
-
-// Read 詳細
-app.get("/keiyo2/:number", (req, res) => {
-  // 本来ならここにDBとのやり取りが入る
-  const number = req.params.number;
-  // インデックスの範囲チェックは省略
-  const detail = station2[ number ];
-  res.render('keiyo2_detail', {id: number, data: detail} );
-});
-
-// Delete 実行
-app.get("/keiyo2/delete/:number", (req, res) => {
-  // 本来は削除の確認ページを表示する
-  // 本来は削除する番号が存在するか厳重にチェックする
-  // 本来ならここにDBとのやり取りが入る
-  station2.splice( req.params.number, 1 );
-  res.redirect('/keiyo2' );
-});
-
-// Create 実行
-app.post("/keiyo2", (req, res) => {
-  // 本来ならここにDBとのやり取りが入る
-  const id = station2.length + 1;
-  const code = req.body.code;
-  const name = req.body.name;
-  const change = req.body.change;
-  const passengers = req.body.passengers;
-  const distance = req.body.distance;
-  station2.push( { id: id, code: code, name: name, change: change, passengers: passengers, distance: distance } );
-  console.log( station2 );
-  res.redirect('/keiyo2' ); // 一覧ページにリダイレクト
-});
-
-// Edit フォーム表示
-app.get("/keiyo2/edit/:number", (req, res) => {
-  // 本来ならここにDBとのやり取りが入る
-  const number = req.params.number;
-  // インデックスの範囲チェックは省略
-  const detail = station2[ number ];
-  res.render('keiyo2_edit', {id: number, data: detail} );
-});
-
-// Update 実行
-app.post("/keiyo2/update/:number", (req, res) => {
-  // 本来は変更する番号が存在するか，各項目が正しいか厳重にチェックする
-  // 本来ならここにDBとのやり取りが入る
-  station2[req.params.number].code = req.body.code;
-  station2[req.params.number].name = req.body.name;
-  station2[req.params.number].change = req.body.change;
-  station2[req.params.number].passengers = req.body.passengers;
-  station2[req.params.number].distance = req.body.distance;
-  console.log( station2 );
-  res.redirect('/keiyo2' );
-});
-
-
-// ★★★ ルーティング (Premier League Club) ★★★
-
-// 1. クラブ一覧表示 (GET /premier)
-app.get("/premier", (req, res) => {
-  // club_list.ejsをレンダリングし、クラブデータ配列を渡す
-  res.render('club_list', { data: premierClubs });
-});
-
-// 2. クラブ詳細表示 (GET /premier/:index)
-// :index は配列のインデックスを指す
-app.get("/premier/:index", (req, res) => {
+// 編集
+app.get("/ballondor/edit/:index", (req, res) => {
   const index = Number(req.params.index);
-  
-  // 配列の範囲チェック
-  if (index >= 0 && index < premierClubs.length) {
-    // インデックスと対応するデータをテンプレートに渡す
-    res.render('club_detail', { 
-      club: premierClubs[index]
-    });
-  } else {
-    // 存在しないインデックスの場合はエラーメッセージを表示
-    res.status(404).send('Not Found: 指定されたクラブデータは見つかりませんでした。');
-  }
+  if (ballondorWinners[index]) {
+    res.render('ballondor_form', { mode: 'edit', winner: ballondorWinners[index], index: index });
+  } else { res.status(404).send("データが見つかりません"); }
+});
+app.post("/ballondor/update/:index", (req, res) => {
+  const index = Number(req.params.index);
+  if (ballondorWinners[index]) {
+    ballondorWinners[index] = {
+      year: Number(req.body.year),
+      name: req.body.name,
+      country: req.body.country,
+      club: req.body.club,
+      position: req.body.position,
+      desc: req.body.desc
+    };
+    res.redirect('/ballondor');
+  } else { res.status(404).send("データが見つかりません"); }
 });
 
-// ★★★★★★★★★★★★★★★★★★★★★★★★★★
+// 削除
+app.post("/ballondor/delete/:index", (req, res) => {
+  const index = Number(req.params.index);
+  if (ballondorWinners[index]) {
+    ballondorWinners.splice(index, 1);
+    res.redirect('/ballondor');
+  } else { res.status(404).send("データが見つかりません"); }
+});
 
 
-// ★★★ 新規追加: アーセナル選手一覧・詳細 ★★★
-
-// 1. 選手一覧表示
+// --------------------------------------------------
+// 3. アーセナル機能 (CRUD)
+// --------------------------------------------------
+// アーセナル 選手一覧
 app.get("/arsenal", (req, res) => {
   res.render('arsenal_list', { players: arsenalPlayers });
 });
 
-// 2. 選手詳細表示
-app.get("/arsenal/:index", (req, res) => {
+// アーセナル 選手詳細
+app.get("/arsenal/detail/:index", (req, res) => {
   const index = Number(req.params.index);
-  if (index >= 0 && index < arsenalPlayers.length) {
-    res.render('arsenal_detail', { player: arsenalPlayers[index] });
+  if (arsenalPlayers[index]) {
+    // テンプレート内で編集・削除リンクを作るために index も渡す
+    res.render('arsenal_detail', { player: arsenalPlayers[index], index: index });
   } else {
-    res.status(404).send('選手データが見つかりません');
+    res.status(404).send("選手が見つかりません");
   }
 });
-// ★★★★★★★★★★★★★★★★★★★★★★★★★★
 
-
-
-// ★★★ 東京モノレール一覧 (新規追加) ★★★
-app.get("/monorail", (req, res) => {
-  // 本来ならここにDBとのやり取りが入る
-  // 配列 'monorail' を 'monorail.ejs' に 'data' という名前で渡す
-  res.render('monorail', { data: monorail });
-});
-// ★★★★★★★★★★★★★★★★★★★★★★★★★★
-
-
-
-
-
-
-
-
-
-// ★★★ その他のルート ★★★
-
-app.get("/hello1", (req, res) => {
-  const message1 = "Hello world";
-  const message2 = "Bon jour";
-  res.render('show', { greet1:message1, greet2:message2});
+// 新規登録画面
+app.get("/arsenal/add", (req, res) => {
+  res.render('arsenal_form', { mode: 'create', player: null, index: null });
 });
 
-app.get("/hello2", (req, res) => {
-  res.render('show', { greet1:"Hello world", greet2:"Bon jour"});
+// 新規登録処理
+app.post("/arsenal/add", (req, res) => {
+  const newPlayer = {
+    name: req.body.name,
+    position: req.body.position, // プロパティ名を統一
+    age: Number(req.body.age),
+    height: Number(req.body.height),
+    foot: req.body.foot,
+    rating: req.body.rating // プロパティ名を統一
+  };
+  arsenalPlayers.push(newPlayer);
+  res.redirect('/arsenal');
 });
 
-app.get("/icon", (req, res) => {
-  res.render('icon', { filename:"./public/Apple_logo_black.svg", alt:"Apple Logo"});
-});
-
-app.get("/omikuji1", (req, res) => {
-  const num = Math.floor( Math.random() * 6 + 1 );
-  let luck = '';
-  if( num==1 ) luck = '大吉';
-  else if( num==2 ) luck = '中吉';
-  // 3以降の判定は省略されていますが、今回はそのまま
-  if(luck === '') luck = '小吉';
-
-  res.send( '今日の運勢は' + luck + 'です' );
-});
-
-app.get("/omikuji2", (req, res) => {
-  const num = Math.floor( Math.random() * 6 + 1 );
-  let luck = '';
-  if( num==1 ) luck = '大吉';
-  else if( num==2 ) luck = '中吉';
-  // 3以降の判定は省略されていますが、今回はそのまま
-  if(luck === '') luck = '小吉';
-
-  res.render( 'omikuji2', {result:luck} );
-});
-
-app.get("/janken", (req, res) => {
-  let hand = req.query.hand;
-  let win = Number( req.query.win );
-  let total = Number( req.query.total );
-  console.log( {hand, win, total});
-  const num = Math.floor( Math.random() * 3 + 1 );
-  let cpu = '';
-  let judgement = '';
-
-  if( num==1 ) cpu = 'グー';
-  else if( num==2 ) cpu = 'チョキ';
-  else cpu = 'パー';
-  
-  // じゃんけんの勝敗判定を追加 (元のコードのコメント部分を置き換え)
-  if (hand === cpu) {
-    judgement = 'あいこ';
-  } else if (
-    (hand === 'グー' && cpu === 'チョキ') ||
-    (hand === 'チョキ' && cpu === 'パー') ||
-    (hand === 'パー' && cpu === 'グー')
-  ) {
-    judgement = '勝ち';
-    win += 1;
+// 編集画面
+app.get("/arsenal/edit/:index", (req, res) => {
+  const index = Number(req.params.index);
+  if (arsenalPlayers[index]) {
+    res.render('arsenal_form', { mode: 'edit', player: arsenalPlayers[index], index: index });
   } else {
-    judgement = '負け';
+    res.status(404).send("選手が見つかりません");
   }
+});
 
-  total += 1; // 毎回 total を増やす
-
-  const display = {
-    your: hand,
-    cpu: cpu,
-    judgement: judgement,
-    win: win,
-    total: total
+// 更新処理
+app.post("/arsenal/update/:index", (req, res) => {
+  const index = Number(req.params.index);
+  if (arsenalPlayers[index]) {
+    arsenalPlayers[index] = {
+      name: req.body.name,
+      position: req.body.position,
+      age: Number(req.body.age),
+      height: Number(req.body.height),
+      foot: req.body.foot,
+      rating: req.body.rating
+    };
+    res.redirect('/arsenal/detail/' + index);
+  } else {
+    res.status(404).send("選手が見つかりません");
   }
-  res.render( 'janken', display );
+});
+
+// 削除処理
+app.post("/arsenal/delete/:index", (req, res) => {
+  const index = Number(req.params.index);
+  if (arsenalPlayers[index]) {
+    arsenalPlayers.splice(index, 1);
+    res.redirect('/arsenal');
+  } else {
+    res.status(404).send("選手が見つかりません");
+  }
 });
 
 app.listen(8080, () => console.log("Example app listening on port 8080!"));
