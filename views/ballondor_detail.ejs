@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title><%= winner.name %>の詳細</title>
+</head>
+<body>
+  <h2><%= winner.name %>の詳細</h2>
+  
+  <table border="1">
+    <tr>
+      <th>項目</th>
+      <th>データ</th>
+    </tr>
+    <tr>
+      <td>年度</td>
+      <td><%= winner.year %>年</td>
+    </tr>
+    <tr>
+      <td>名前</td>
+      <td><%= winner.name %></td>
+    </tr>
+    <tr>
+      <td>国籍</td>
+      <td><%= winner.country %></td>
+    </tr>
+    <tr>
+      <td>所属クラブ</td>
+      <td><%= winner.club %></td>
+    </tr>
+    <tr>
+      <td>ポジション</td>
+      <td><%= winner.position %></td>
+    </tr>
+    <tr>
+      <td>受賞理由・備考</td>
+      <td><%= winner.desc %></td>
+    </tr>
+  </table>
+
+  <br>
+  <a href="/ballondor">一覧に戻る</a>
+</body>
+</html>

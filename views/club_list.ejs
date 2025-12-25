@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>プレミアリーグ管理</title>
+  <style>
+    body { font-family: sans-serif; padding: 20px; color: #333; }
+    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+    th, td { border: 1px solid #ccc; padding: 10px; text-align: left; }
+    th { background-color: #38003c; color: white; } /* プレミアカラー */
+    a { color: #0066cc; text-decoration: none; }
+    .btn { padding: 5px 10px; border: 1px solid #ccc; background: #eee; cursor: pointer; color: #333; font-size: 0.9em; border-radius: 3px; }
+    .btn-add { background: #d4edda; border-color: #c3e6cb; display: inline-block; margin-bottom: 10px; }
+    .btn-del { background: #f8d7da; border-color: #f5c6cb; }
+  </style>
+</head>
+<body>
+  <h2>プレミアリーグ クラブ一覧</h2>
+  <a href="/premier/add" class="btn btn-add">+ 新規クラブ登録</a>
+  
+  <table>
+    <tr><th>ID</th><th>クラブ名</th><th>略称</th><th>操作</th></tr>
+    <% data.forEach((club, index) => { %>
+      <tr>
+        <td><%= club.id %></td>
+        <td><a href="/premier/detail/<%= index %>"><%= club.name %></a></td>
+        <td><%= club.short %></td>
+        <td>
+          <a href="/premier/edit/<%= index %>" class="btn">編集</a>
+          <form action="/premier/delete/<%= index %>" method="POST" style="display:inline;" onsubmit="return confirm('削除しますか？');">
+            <button type="submit" class="btn btn-del">削除</button>
+          </form>
+        </td>
+      </tr>
+    <% }); %>
+  </table>
+  <p><a href="/">トップに戻る</a></p>
+</body>
+</html>

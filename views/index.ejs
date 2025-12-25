@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>Football Data App</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f8f9fa;
+      color: #333;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+    }
+    h1 {
+      margin-bottom: 40px;
+      font-weight: normal;
+      letter-spacing: 2px;
+    }
+    .menu {
+      list-style: none;
+      padding: 0;
+      width: 100%;
+      max-width: 400px;
+    }
+    .menu li {
+      margin-bottom: 20px;
+    }
+    .menu a {
+      display: block;
+      padding: 20px;
+      text-align: center;
+      text-decoration: none;
+      color: #333;
+      background-color: white;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      transition: all 0.2s ease;
+      font-size: 1.1em;
+    }
+    .menu a:hover {
+      background-color: #333;
+      color: white;
+      border-color: #333;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+  </style>
+</head>
+<body>
+
+  <h1>サッカーアプリケーション</h1>
+
+  <ul class="menu">
+    <li>
+      <a href="/premier">プレミアリーグ クラブ一覧</a>
+    </li>
+    <li>
+      <a href="/arsenal">アーセナル 選手名鑑</a>
+    </li>
+    <li>
+      <a href="/ballondor">バロンドール 歴代受賞者</a>
+    </li>
+  </ul>
+
+</body>
+</html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>選手データ入力</title>
+  <style>
+    body { font-family: sans-serif; padding: 20px; color: #333; }
+    .form-group { margin-bottom: 15px; }
+    label { display: block; margin-bottom: 5px; font-weight: bold; }
+    input { padding: 8px; width: 100%; max-width: 300px; box-sizing: border-box; }
+    .btn { padding: 10px 20px; background: #333; color: white; border: none; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <h2><%= mode === 'create' ? '新規選手登録' : '選手データ編集' %></h2>
+  
+  <form action="<%= mode === 'create' ? '/arsenal/add' : '/arsenal/update/' + index %>" method="POST">
+    <div class="form-group">
+      <label>名前</label>
+      <input type="text" name="name" value="<%= player ? player.name : '' %>" required>
+    </div>
+    <div class="form-group">
+      <label>ポジション (FW/MF/DF/GK)</label>
+      <input type="text" name="pos" value="<%= player ? player.pos : '' %>" required>
+    </div>
+    <div class="form-group">
+      <label>年齢</label>
+      <input type="number" name="age" value="<%= player ? player.age : '' %>" required>
+    </div>
+    <div class="form-group">
+      <label>身長 (cm)</label>
+      <input type="number" name="height" value="<%= player ? player.height : '' %>" required>
+    </div>
+    <div class="form-group">
+      <label>利き足</label>
+      <input type="text" name="foot" value="<%= player ? player.foot : '' %>">
+    </div>
+    <div class="form-group">
+      <label>評価 (S/A/B/C)</label>
+      <input type="text" name="rate" value="<%= player ? player.rate : '' %>">
+    </div>
+    <button type="submit" class="btn">保存</button>
+  </form>
+  
+  <p><a href="/arsenal">一覧に戻る</a></p>
+</body>
+</html>

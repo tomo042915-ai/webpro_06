@@ -1,0 +1,25 @@
+<!Doctype html>
+
+<html>
+<head>
+<meta charset="utf-8">
+<title><%= club.name %> の詳細</title>
+</head>
+<body>
+<h2><%= club.name %> の詳細情報</h2>
+
+<table>
+<tr><th>項目</th><th>データ</th></tr>
+<tr><td>クラブ名</td><td><%= club.name %></td></tr>
+<tr><td>略称</td><td><%= club.shortName %></td></tr>
+<tr><td>推定市場価値</td><td><%= club.marketValue.toFixed(1) %> 億ユーロ</td></tr>
+<tr><td>監督</td><td><%= club.manager %></td></tr>
+<tr><td>ホームスタジアム</td><td><%= club.stadium %></td></tr> <!-- 追加 -->
+</table>
+
+<p><small>※データは架空のものです。</small></p>
+
+<a href="/premier">クラブ一覧に戻る</a>
+
+</body>
+</html>
