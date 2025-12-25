@@ -4,28 +4,30 @@
   <meta charset="UTF-8">
   <title>アーセナル選手一覧</title>
   <style>
-    body { font-family: sans-serif; padding: 20px; color: #333; }
+    body { font-family: sans-serif; padding: 20px; color: #333; background-color: #f9f9f9; }
     h1 { color: #EF0107; border-bottom: 2px solid #EF0107; padding-bottom: 5px; }
     ul { list-style-type: none; padding: 0; }
-    li { margin: 10px 0; border-bottom: 1px solid #ddd; padding: 10px; }
-    a { text-decoration: none; color: #063672; font-weight: bold; font-size: 1.2em; }
+    li { margin: 10px 0; border-bottom: 1px solid #ddd; padding: 10px; background: white; display: flex; align-items: center; }
+    a { text-decoration: none; color: #063672; font-weight: bold; font-size: 1.1em; }
     a:hover { color: #EF0107; text-decoration: underline; }
-    .position { display: inline-block; width: 40px; font-weight: bold; color: #555; }
+    .position { display: inline-block; width: 40px; font-weight: bold; color: #fff; background: #333; text-align: center; border-radius: 3px; margin-right: 15px; font-size: 0.8em; padding: 2px 0; }
+    .add-link { display: inline-block; margin-top: 20px; padding: 10px 15px; background-color: #28a745; color: white; border-radius: 5px; text-decoration: none; }
   </style>
 </head>
 <body>
   <h1>アーセナル 選手一覧</h1>
+  <a href="/arsenal/add" class="add-link">＋ 新規選手を登録する</a>
   <ul>
-    <% /* 選手配列をループして表示 */ %>
     <% players.forEach((player, index) => { %>
       <li>
         <span class="position"><%= player.position %></span>
-        <!-- ここをクリックすると詳細ページ (/arsenal/0 など) に飛びます -->
-        <a href="/arsenal/<%= index %>"><%= player.name %></a>
+        <%# リンク先を /arsenal/detail/:index に修正 %>
+        <a href="/arsenal/detail/<%= index %>"><%= player.name %></a>
       </li>
     <% }); %>
   </ul>
-  <br>
+  
+  <br><br>
   <a href="/">トップに戻る</a>
 </body>
 </html>
